@@ -4,86 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pilot Break Calculator</title>
+    <link rel="stylesheet" href="doogie.css"> 
     <link rel="manifest" href="/manifest.json">
     <link rel="apple-touch-icon" sizes="192x192" href="icons/icon-192x192.png">
     <link rel="apple-touch-icon" sizes="256x256" href="icons/icon-256x256.png">
     <link rel="apple-touch-icon" sizes="384x384" href="icons/icon-384x384.png">
     <link rel="apple-touch-icon" sizes="512x512" href="icons/icon-512x512.png">
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f4f4f4;
-            color: #333;
-        }
-        .container {
-            max-width: 600px;
-            margin: 20px auto;
-            padding: 20px;
-            background-color: #fff;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            border-radius: 8px;
-        }
-        h1 {
-            text-align: center;
-            font-size: 1.5em;
-            margin-bottom: 20px;
-        }
-        label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: bold;
-        }
-        input[type="text"] {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 20px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            font-size: 1em;
-        }
-        .buttons {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 20px;
-        }
-        .buttons button {
-            padding: 10px 20px;
-            font-size: 1em;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            background-color: #007BFF;
-            color: white;
-        }
-        .buttons button:hover {
-            background-color: #0056b3;
-        }
-        #calculate-btn {
-            width: 100%;
-            margin-top: 10px;
-            background-color: #28a745;
-        }
-        #calculate-btn:hover {
-            background-color: #218838;
-        }
-        #results {
-            margin-top: 20px;
-        }
-        @media (max-width: 600px) {
-            .buttons {
-                flex-direction: column;
-            }
-            .buttons button {
-                width: 100%;
-                margin-bottom: 10px;
-            }
-            .buttons button:last-child {
-                margin-bottom: 0;
-            }
-        }
-    </style>
 </head>
 <body>
     <div class="container">

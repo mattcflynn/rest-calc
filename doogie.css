@@ -1,0 +1,100 @@
+/* CSS file: doogie.css */
+body {
+    font-family: 'Courier New', Courier, monospace; /* Monospaced font to replicate old-school computers */
+    background-color: #0000AA; /* Classic blue background */
+    color: #FFFFFF; /* White text */
+    margin: 0;
+    padding: 20px;
+    font-size: 1rem; /* Use rem for scaling font sizes */
+    line-height: 1.5;
+}
+
+.container {
+    max-width: 90%; /* Use a percentage to make the container responsive */
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #0000AA; /* Blue background continues inside container */
+    border: 2px solid #FFFFFF; /* White border to mimic old text editor boxes */
+}
+
+h1 {
+    font-size: 2rem; /* Use rem for responsive font size */
+    color: #FFFFFF; /* White title */
+    text-align: left; /* Align title to the left, like an old terminal */
+    margin-bottom: 20px;
+}
+
+label {
+    font-size: 1rem;
+    display: block;
+    margin-bottom: 10px;
+    color: #FFFFFF;
+}
+
+input[type="text"], textarea {
+    width: 100%; /* Full width of the container */
+    padding: 1rem; /* Relative padding for better scaling */
+    margin-bottom: 20px;
+    border: 1px solid #FFFFFF; /* White border around input */
+    background-color: #000066; /* Darker blue for input background */
+    color: #FFFFFF; /* White text in the input */
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 1rem;
+}
+
+button {
+    padding: 10px 20px;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 1rem;
+    background-color: #000066; /* Darker blue for buttons */
+    color: #FFFFFF; /* White text */
+    border: 2px solid #FFFFFF; /* White button borders */
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #000099; /* Slightly lighter blue on hover */
+}
+
+#results {
+    margin-top: 20px;
+    font-size: 1rem;
+    color: #FFFFFF;
+    background-color: #000066;
+    padding: 20px;
+    border: 1px solid #FFFFFF;
+}
+
+/* MEDIA QUERIES */
+
+/* Adjust for smaller screens (phones) */
+@media (max-width: 600px) {
+    body {
+        padding: 10px; /* Reduce padding on smaller screens */
+        font-size: 0.9rem; /* Scale down the base font size */
+    }
+
+    h1 {
+        font-size: 1.5rem; /* Smaller font for headers on small screens */
+    }
+
+    input[type="text"], textarea, button {
+        font-size: 0.9rem; /* Slightly smaller for inputs and buttons */
+        padding: 0.8rem; /* Smaller padding */
+    }
+
+    #results {
+        font-size: 0.9rem; /* Adjust results font size */
+    }
+}
+
+/* Adjust for medium screens (tablets) */
+@media (min-width: 601px) and (max-width: 1024px) {
+    body {
+        font-size: 1rem; /* Slightly bigger font size for medium screens */
+    }
+
+    h1 {
+        font-size: 1.8rem; /* Adjust header size for medium screens */
+    }
+}
