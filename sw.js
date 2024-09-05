@@ -4,7 +4,7 @@ const urlsToCache = [
   '/',
   '/index.html',
   '/script.js',
-  '/style.css', // if you have a separate CSS file
+  '/doogie.css', // if you have a separate CSS file
   // Add other assets you want to cache, like images or fonts
 ];
 

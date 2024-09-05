@@ -67,7 +67,24 @@ function calculateBreaks() {
 }
 
 function validateInputs(takeoffTime, flightDuration) {
-    return /^\d{4}$/.test(takeoffTime) && /^\d{4}$/.test(flightDuration);
+    const takeoffValid = /^\d{4}$/.test(takeoffTime) && takeoffTime >= "0000" && takeoffTime <= "2359";
+    const flightValid = /^\d{3,4}$/.test(flightDuration);
+    
+    if (!takeoffValid || !flightValid) {
+        return false;
+    }
+    
+    // Ensure valid hours and minutes ranges for takeoff time
+    const takeoffHours = parseInt(takeoffTime.slice(0, 2), 10);
+    const takeoffMinutes = parseInt(takeoffTime.slice(2, 4), 10);
+    if (takeoffHours > 23 || takeoffMinutes > 59) return false;
+
+    // Ensure valid hours and minutes ranges for flight duration
+    const flightHours = parseInt(flightDuration.slice(0, flightDuration.length - 2), 10);
+    const flightMinutes = parseInt(flightDuration.slice(-2), 10);
+    if (flightMinutes > 59) return false;
+
+    return true;
 }
 
 function parseTime(timeInput) {
@@ -79,8 +96,17 @@ function parseTime(timeInput) {
 }
 
 function parseDuration(durationInput) {
-    const hours = parseInt(durationInput.slice(0, 2), 10);
-    const minutes = parseInt(durationInput.slice(2, 4), 10);
+    let hours, minutes;
+
+    // Handle both 3-digit and 4-digit durations
+    if (durationInput.length === 3) {
+        hours = parseInt(durationInput.slice(0, 1), 10);
+        minutes = parseInt(durationInput.slice(1, 3), 10);
+    } else if (durationInput.length === 4) {
+        hours = parseInt(durationInput.slice(0, 2), 10);
+        minutes = parseInt(durationInput.slice(2, 4), 10);
+    }
+
     return {
         hours: hours,
         minutes: minutes,

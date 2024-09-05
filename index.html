@@ -14,11 +14,11 @@
 <body>
     <div class="container">
         <h1>Pilot Break Calculator</h1>
-        <label for="takeoff-time">Takeoff Time (UTC, 24-hour, e.g., 1400):</label>
-        <input type="text" id="takeoff-time" placeholder="Enter takeoff time (e.g., 1400)">
-
-        <label for="flight-duration">Flight Duration (e.g., 1045 for 10 hours 45 minutes):</label>
-        <input type="text" id="flight-duration" placeholder="Enter flight duration (e.g., 1045)">
+        <label for="takeoff-time">Takeoff Time (UTC):</label>
+        <input type="number" id="takeoff-time" placeholder="Enter takeoff time (e.g., 1400)" min="0" max="2359">
+        
+        <label for="flight-duration">Flight Duration (Hours and Minutes):</label>
+        <input type="number" id="flight-duration" placeholder="Enter flight duration (e.g., 945 or 1030)" min="0" max="2359">
 
         <div class="buttons">
             <button onclick="adjustBreakTimes(1)">+1 min to Long Breaks</button>
