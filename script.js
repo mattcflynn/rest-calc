@@ -1,5 +1,4 @@
 let breakSchedules = {};
-let landingTime, flightDuration, breakEndTime;
 
 if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
@@ -9,47 +8,44 @@ if ('serviceWorker' in navigator) {
         console.log('ServiceWorker registration failed: ', error);
       });
     });
-  }
+}
 
 function calculateBreaks() {
     const takeoffTimeInput = document.getElementById("takeoff-time").value;
     const flightDurationInput = document.getElementById("flight-duration").value;
+    const breakStartInput = document.getElementById("break-start").value;
+    const breakEndInput = document.getElementById("break-end").value;
 
-    if (!validateInputs(takeoffTimeInput, flightDurationInput)) {
-        alert("Please enter valid takeoff time and flight duration in the correct format.");
+    if (!validateInputs(takeoffTimeInput, flightDurationInput, breakStartInput, breakEndInput)) {
+        alert("Please enter valid inputs in the correct format.");
         return;
     }
 
     const takeoffTime = parseTime(takeoffTimeInput);
-    flightDuration = parseDuration(flightDurationInput);
+    const flightDuration = parseDuration(flightDurationInput);
+    const breakStart = parseInt(breakStartInput, 10);
+    const breakEnd = parseInt(breakEndInput, 10);
 
-    landingTime = new Date(takeoffTime.getTime() + flightDuration.totalMinutes * 60000);
-
-    const breakStart = 15; // 15 minutes after takeoff
-    const breakEnd = 45;   // 45 minutes before landing
-    const totalBreakTime = flightDuration.totalMinutes - (breakStart + breakEnd);
-
-    if (totalBreakTime <= 0) {
-        alert("Invalid total break time. Check your flight duration and input times.");
+    if (breakStart + breakEnd >= flightDuration.totalMinutes) {
+        alert("Invalid break times. The total break time cannot exceed the flight duration.");
         return;
     }
 
-    breakEndTime = new Date(landingTime.getTime() - breakEnd * 60000);
+    const landingTime = new Date(takeoffTime.getTime() + flightDuration.totalMinutes * 60000);
+    const totalBreakTime = flightDuration.totalMinutes - (breakStart + breakEnd);
+    const breakEndTime = new Date(landingTime.getTime() - breakEnd * 60000);
 
-    // Three equal breaks
+    // Calculate break schedules
     const threeEqualBreaks = totalBreakTime / 3;
     const threeBreaks = calculateBreakScheduleFromEnd(breakEndTime, threeEqualBreaks, threeEqualBreaks, threeEqualBreaks);
 
-    // Two equal breaks
     const twoEqualBreaks = totalBreakTime / 2;
     const twoBreaks = calculateBreakScheduleFromEnd(breakEndTime, twoEqualBreaks, twoEqualBreaks);
 
-    // Short-Long-Short breaks
     const longBreak = totalBreakTime / 2;
     const shortBreak = longBreak / 2;
     const shortLongShortBreaks = calculateBreakScheduleFromEnd(breakEndTime, shortBreak, longBreak, shortBreak);
 
-    // Short-Long-Long-Short breaks
     const shortBreak2 = totalBreakTime / 5;
     const longBreak2 = shortBreak2 * 1.5;
     const shortLongLongShortBreaks = calculateBreakScheduleFromEnd(breakEndTime, shortBreak2, longBreak2, longBreak2, shortBreak2);
@@ -63,28 +59,16 @@ function calculateBreaks() {
     };
 
     // Display results
-    displayResults(breakSchedules);
+    displayResults(breakSchedules, landingTime);
 }
 
-function validateInputs(takeoffTime, flightDuration) {
-    const takeoffValid = /^\d{4}$/.test(takeoffTime) && takeoffTime >= "0000" && takeoffTime <= "2359";
-    const flightValid = /^\d{3,4}$/.test(flightDuration);
-    
-    if (!takeoffValid || !flightValid) {
-        return false;
-    }
-    
-    // Ensure valid hours and minutes ranges for takeoff time
-    const takeoffHours = parseInt(takeoffTime.slice(0, 2), 10);
-    const takeoffMinutes = parseInt(takeoffTime.slice(2, 4), 10);
-    if (takeoffHours > 23 || takeoffMinutes > 59) return false;
+function validateInputs(takeoffTime, flightDuration, breakStart, breakEnd) {
+    const isTakeoffValid = /^\d{4}$/.test(takeoffTime) && takeoffTime >= "0000" && takeoffTime <= "2359";
+    const isFlightValid = /^\d{3,4}$/.test(flightDuration);
+    const isBreakStartValid = /^\d+$/.test(breakStart) && parseInt(breakStart, 10) >= 0;
+    const isBreakEndValid = /^\d+$/.test(breakEnd) && parseInt(breakEnd, 10) >= 0;
 
-    // Ensure valid hours and minutes ranges for flight duration
-    const flightHours = parseInt(flightDuration.slice(0, flightDuration.length - 2), 10);
-    const flightMinutes = parseInt(flightDuration.slice(-2), 10);
-    if (flightMinutes > 59) return false;
-
-    return true;
+    return isTakeoffValid && isFlightValid && isBreakStartValid && isBreakEndValid;
 }
 
 function parseTime(timeInput) {
@@ -98,7 +82,6 @@ function parseTime(timeInput) {
 function parseDuration(durationInput) {
     let hours, minutes;
 
-    // Handle both 3-digit and 4-digit durations
     if (durationInput.length === 3) {
         hours = parseInt(durationInput.slice(0, 1), 10);
         minutes = parseInt(durationInput.slice(1, 3), 10);
@@ -141,7 +124,7 @@ function formatBreakSchedule(breaks) {
     }).join('');
 }
 
-function displayResults(schedules) {
+function displayResults(schedules, landingTime) {
     document.getElementById("results").innerHTML = `
         <h3>Landing Time: ${landingTime.toISOString().substring(11, 16)} UTC</h3>
         <h3>Three Equal Breaks:</h3>

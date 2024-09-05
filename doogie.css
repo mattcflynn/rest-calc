@@ -31,8 +31,8 @@ label {
     color: #FFFFFF;
 }
 
-input[type="text"], textarea {
-    width: 100%; /* Full width of the container */
+input[type="number"], textarea {
+    width: 60px; /* wide enough for 4 digits */
     padding: 1rem; /* Relative padding for better scaling */
     margin-bottom: 20px;
     border: 1px solid #FFFFFF; /* White border around input */
@@ -78,7 +78,7 @@ button:hover {
         font-size: 1.5rem; /* Smaller font for headers on small screens */
     }
 
-    input[type="text"], textarea, button {
+    input[type="number"], textarea, button {
         font-size: 0.9rem; /* Slightly smaller for inputs and buttons */
         padding: 0.8rem; /* Smaller padding */
     }
