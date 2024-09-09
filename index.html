@@ -10,6 +10,9 @@
     <link rel="apple-touch-icon" sizes="256x256" href="icons/icon-256x256.png">
     <link rel="apple-touch-icon" sizes="384x384" href="icons/icon-384x384.png">
     <link rel="apple-touch-icon" sizes="512x512" href="icons/icon-512x512.png">
+    <!-- Fullscreen support for iOS -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 </head>
 <body>
     <div class="container">
@@ -35,5 +38,17 @@
 
     <!-- Reference to external JavaScript file -->
     <script src="script.js"></script>
+    <!-- Link to external serviceworker file -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', function() {
+            navigator.serviceWorker.register('./sw.js').then(function(registration) {
+                console.log('ServiceWorker registration successful with scope: ', registration.scope);
+            }, function(error) {
+                console.log('ServiceWorker registration failed: ', error);
+            });
+            });
+        }
+        </script>
 </body>
 </html>
