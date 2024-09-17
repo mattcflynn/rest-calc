@@ -1,16 +1,14 @@
 
 const CACHE_NAME = 'pilot-break-calculator-cache-v2';
 const urlsToCache = [
-  '/',
-  '/index.html',
-  '/script.js',
-  '/doogie.css', 
-  '/manifest.json',
-  '/icons/icon-192x192.png',
-  '/icons/icon-256x256.png',
-  '/icons/icon-384x384.png',
-  '/icons/icon-512x512.png'// if you have a separate CSS file
-  // Add other assets you want to cache, like images or fonts
+  'index.html',
+  'script.js',
+  'doogie.css',
+  'manifest.json',
+  'icons/icon-192x192.png',
+  'icons/icon-256x256.png',
+  'icons/icon-384x384.png',
+  'icons/icon-512x512.png'
 ];
 
 self.addEventListener('install', event => {
@@ -31,7 +29,7 @@ self.addEventListener('fetch', event => {
         return response || fetch(event.request).catch(() => {
           // Optional: Return a fallback page for HTML requests
           if (event.request.mode === 'navigate') {
-            return caches.match('/index.html');
+            return caches.match('index.html');
           }
         });
       })
