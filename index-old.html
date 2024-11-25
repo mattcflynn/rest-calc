@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pilot Break Calculator</title>
+    <link rel="stylesheet" href="doogie.css"> 
+    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" sizes="192x192" href="icons/icon-192x192.png">
+    <link rel="apple-touch-icon" sizes="256x256" href="icons/icon-256x256.png">
+    <link rel="apple-touch-icon" sizes="384x384" href="icons/icon-384x384.png">
+    <link rel="apple-touch-icon" sizes="512x512" href="icons/icon-512x512.png">
+    <!-- Fullscreen support for iOS -->
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+</head>
+<body>
+    <div class="container">
+        <h1>Pilot Break Calculator</h1>
+        <label for="takeoff-time">Takeoff Time (UTC):</label>
+        <input type="number" id="takeoff-time" placeholder="HHMM" min="0" max="2359">
+        
+        <label for="flight-duration">Flight Duration (Hours and minutes):</label>
+        <input type="number" id="flight-duration" placeholder="HHMM" min="0" max="2359">
+        
+        <label for="break-start">Start breaks [input minutes] after takeoff:</label>
+        <input type="number" id="break-start" min="0" value="15">
+        
+        <label for="break-end">End breaks [input minutes] before landing:</label>
+        <input type="number" id="break-end" min="0" value="45">
+        
+        <div class="button-container">
+            <button id="calculate-btn" onclick="calculateBreaks()">Calculate Breaks</button>
+        </div>
+        
+        <div id="results"></div>
+    </div>
+
+    <!-- Reference to external JavaScript file -->
+    <script src="script.js"></script>
+    <!-- Link to external serviceworker file -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', function() {
+            navigator.serviceWorker.register('sw.js').then(function(registration) {
+                console.log('ServiceWorker registration successful with scope: ', registration.scope);
+            }, function(error) {
+                console.log('ServiceWorker registration failed: ', error);
+            });
+            });
+        }
+        </script>
+</body>
+</html>

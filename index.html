@@ -1,10 +1,10 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pilot Break Calculator</title>
-    <link rel="stylesheet" href="doogie.css"> 
+    <title>Rest Break Calculator</title>
     <link rel="manifest" href="manifest.json">
     <link rel="apple-touch-icon" sizes="192x192" href="icons/icon-192x192.png">
     <link rel="apple-touch-icon" sizes="256x256" href="icons/icon-256x256.png">
@@ -13,29 +13,615 @@
     <!-- Fullscreen support for iOS -->
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<style>
+    	td
+	{border-style: none;
+            border-color: inherit;
+            border-width: medium;
+            padding: 0px;
+            color:windowtext;
+	        font-size:10.0pt;
+	        font-weight:400;
+	        font-style:normal;
+	        text-decoration:none;
+	        font-family:Arial;
+	        /*text-align:general;*/
+	        vertical-align:bottom;
+	        white-space:nowrap;
+	}
+        .ColumnH1 {
+            color: inherit;
+            font-size: 14.0pt;
+            font-weight:bold;
+            font-style: normal;
+            text-decoration: none;
+            font-family:"Courier New", Courier, monospace;
+            text-align:left;             
+            vertical-align: bottom;
+            white-space: nowrap;
+            border-style: none;
+            border-color: inherit;
+            border-width: medium;
+            padding: 0px;
+        }
+        .ColumnH3Time {
+            color: gray;
+            font-size: 14.0pt;
+            font-weight:bold;
+            font-style:normal;
+            text-decoration:none;
+            font-family:"Courier New", Courier, monospace;
+            text-align: right;
+            vertical-align: bottom;
+            white-space: nowrap;
+            border-style: none;
+            border-color: inherit;
+            border-width: medium;
+            padding: 0px;
+        }
+        .Column3Time {
+            color: gray;
+            font-size: 12.0pt;
+            font-weight: normal;
+            font-style: normal;
+            text-decoration: none;
+            font-family:"Courier New", Courier, monospace;
+            text-align: right;
+            vertical-align: bottom;
+            white-space: nowrap;
+            border-style: none;
+            border-color: inherit;
+            border-width: medium;
+            padding: 0px;
+            font-size: medium;
+        }
+       .ColumnH2-3 {
+            color: inherit;
+            font-size: 14.0pt;
+            font-weight: bold;
+            font-style: normal;
+            text-decoration: none;
+            font-family:"Courier New", Courier, monospace;
+            text-align: left;
+            vertical-align: bottom;
+            white-space: nowrap;
+            border-style: none;
+            border-color: inherit;
+            border-width: medium;
+            padding: 0px;
+        }
+        .Column2-3 {
+            color: inherit;
+            font-size: 12.0pt;
+            font-weight:bold;
+            font-style: normal;
+            text-decoration: none;
+            font-family:"Courier New", Courier, monospace;
+            text-align: left;
+            vertical-align: bottom;
+            white-space: nowrap;
+            border-style: none;
+            border-color: inherit;
+            border-width: medium;
+            padding: 0px;
+        }
+        .ColumnH4 {
+            color: inherit;
+            font-size: 14.0pt;
+            font-weight: bold;
+            font-style: normal;
+            text-decoration: none;
+            font-family:"Courier New", Courier, monospace;
+            text-align: center;
+            vertical-align: bottom;
+            white-space: nowrap;
+            border-style: none;
+            border-color: inherit;
+            border-width: medium;
+            padding: 0px;
+        }
+      .Column4 {
+            color: inherit;
+            font-size: 12.0pt;
+            font-weight: bold;
+            font-style: normal;
+            text-decoration: none;
+            font-family:"Courier New", Courier, monospace;
+            text-align: center;
+            vertical-align: bottom;
+            white-space: nowrap;
+            border-style: none;
+            border-color: inherit;
+            border-width: medium;
+            padding: 0px;
+        }
+        .ColumnH5-8 {
+            color: gray;
+            font-size: 14.0pt;
+            font-weight:bold;
+            font-style: normal;
+            text-decoration: none;
+            font-family:"Courier New", Courier, monospace;
+            text-align: center;
+            vertical-align: bottom;
+            white-space: nowrap;
+            border-style: none;
+            border-color: inherit;
+            border-width: medium;
+            padding: 0px;
+        }
+        .Columns5-8 {
+            /*height: 14.0pt;*/
+            color: gray; /*font-size: 10.0pt;*/
+            font-size: 12.0pt;
+            font-weight: normal;
+            font-style: normal;
+            text-decoration: none;
+            font-family:"Courier New", Courier, monospace;
+            text-align: center;
+            vertical-align: bottom;
+            white-space: nowrap;
+            border-style: none;
+            border-color: inherit;
+            border-width: medium;
+            padding: 0px;
+            font-size: medium;
+        }
+        td {
+            width: 50px;
+            height: 10px;
+        }
+        .InputBox {
+            background-color:#d3d3d3;
+            width: 50px;
+            text-align: right;
+            font-size:14px;
+            font-weight:bold;
+        }
+</style>
+
 </head>
 <body>
-    <div class="container">
-        <h1>Pilot Break Calculator</h1>
-        <label for="takeoff-time">Takeoff Time (UTC):</label>
-        <input type="number" id="takeoff-time" placeholder="HHMM" min="0" max="2359">
-        
-        <label for="flight-duration">Flight Duration (Hours and minutes):</label>
-        <input type="number" id="flight-duration" placeholder="HHMM" min="0" max="2359">
-        
-        <label for="break-start">Start breaks [input minutes] after takeoff:</label>
-        <input type="number" id="break-start" min="0" value="15">
-        
-        <label for="break-end">End breaks [input minutes] before landing:</label>
-        <input type="number" id="break-end" min="0" value="45">
-        
-        <div class="button-container">
-            <button id="calculate-btn" onclick="calculateBreaks()">Calculate Breaks</button>
-        </div>
-        
-        <div id="results"></div>
-    </div>
+<h1>Rest Break Calculator</h1>
+    <p>All times must be entered with no &quot;:&quot;. For example enter 740 as opposed to 7:40.</p>
+<table border="0" style="border-collapse:collapse;">
 
+
+<tr>
+    <td class="ColumnH1" colspan="6">Input</td>
+    <td></td>
+</tr>
+<tr>
+     <td></td>
+     <td class="ColumnH2-3" colspan="2">ETE</td>
+     <td colspan="2"><input id="ETEBox" class="InputBox" type="number" onkeypress="Javascript: if (event.keyCode==13) OffTimeBox.focus();"/></td>
+     <td colspan="3"></td>
+</tr>
+<tr>
+     <td></td>
+     <td class="ColumnH2-3" colspan="2">Off Time</td>
+     <td colspan="2"><input id="OffTimeBox" class="InputBox" type="number" onkeypress="Javascript: if (event.keyCode==13) UpdateBreaks();"/></td>
+     <td colspan="3"></td>
+</tr>
+<tr>
+     <td></td>
+     <td class="ColumnH2-3" colspan="2">After T.O.</td>
+     <td colspan="2"><input id="StartBreaksBox" class="InputBox" type="number" value="15" onkeypress="Javascript: if (event.keyCode == 13) { UpdateBreaks(); EndBreaksBox.focus();}"/></td>
+     <td colspan="3"></td>
+</tr>
+<tr>
+     <td></td>
+     <td class="ColumnH2-3" colspan="2">Before Land</td>
+     <td colspan="2"><input id="EndBreaksBox" class="InputBox" type="number" value="45" onkeypress="Javascript: if (event.keyCode==13) {EndBreaksBox.blur(); UpdateBreaks();}"/></td>
+     <td colspan ="3">&nbsp;</td>
+</tr>
+<tr>
+    <td class="ColumnH1" colspan="1"></td>
+    <td colspan="2"><input id="UpdateBreaksButton" type="button" onclick="UpdateBreaks()" value="Re-calculate if needed" /></td>
+    <td></td>
+</tr>
+<tr>
+    <td colspan="8">&nbsp;</td>
+</tr>
+<tr>
+    <td class="ColumnH1" colspan="8">3 Pilots</td>
+</tr>
+<tr>
+  <td colspan="8">&nbsp;</td>
+</tr>
+<tr>
+     <td></td>
+     <td class="ColumnH2-3" colspan="5">Min Land Pilot Break</td>
+     <td colspan="2"><input id="MinLPBox" class="InputBox" type="number" value="145" onchange="Clear3Man()"/></td>
+     <td colspan="1"></td>
+</tr>
+<tr>
+     <td></td>
+     <td class="ColumnH2-3" colspan="5">Min Monitor Pilot Break</td>
+     <td colspan="2"><input id="MinMonitorBox" class="InputBox" type="number" value="130" onchange="Clear3Man()"/></td>
+     <td colspan="1"></td>
+</tr>
+
+<tr>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td class="ColumnH4">UTC</td>
+    <td></td>
+</tr>
+<tr>
+    <td> </td>
+    <td></td>
+    <td></td>
+    <td id="zAAA_time1" class="Column4">-</td>
+    <td></td>
+</tr>
+
+<tr>
+    <td> </td>
+    <td class="Column2-3">
+        <select id="Break1Pilot" onchange="Clear3Man()">
+            <option value="Relief" selected>Relief</option>
+            <option value="Monitor">Monitor</option>
+        </select>
+    </td>
+    <td id="AAA_BreakLength1" class="Column3Time">-</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+</tr>
+<tr>
+    <td> </td>
+    <td></td>
+    <td></td>
+    <td id="zAAA_time2" class="Column4">-</td>
+    <td></td>
+</tr>
+<tr>
+    <td> </td>
+    <td class="Column2-3">
+        <select id="Break2Pilot" onchange="Clear3Man()">
+            <option value="Land" selected>Land</option>
+            <option value="Monitor">Monitor</option>
+            <option value="Relief">Relief</option>
+        </select>
+    </td>
+    <td id="AAA_BreakLength2" class="Column3Time">-</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+</tr>
+<tr>
+    <td> </td>
+    <td></td>
+    <td></td>
+    <td id="zAAA_time3" class="Column4">-</td>
+    <td></td>
+</tr>
+<tr>
+    <td> </td>
+    <td class="Column2-3">
+        <select id="Break3Pilot" onchange="Clear3Man()">
+            <option value="Monitor" selected>Monitor</option>
+            <option value="Land">Land</option>
+            <option value="Relief">Relief</option>
+        </select>
+    </td>
+    <td id="AAA_BreakLength3" class="Column3Time">-</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+</tr>
+<tr>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td id="zAAA_time4" class="Column4">-</td>
+    <td></td>
+</tr>
+<tr>
+    <td></td>
+    <td colspan="7" id="Alert3Man"></td>
+</tr>
+<tr>
+    <td colspan="8">&nbsp;</td>
+</tr>
+<tr>
+    <td class="ColumnH1" colspan="8">4 Pilots Even Rest Breaks</td>
+</tr>
+<tr>
+    <td colspan="8">&nbsp;</td>
+</tr>
+<tr>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td class="ColumnH4">UTC</td>
+    <td></td>
+</tr>
+<tr>
+    <td> </td>
+    <td></td>
+    <td></td>
+    <td id="zAAAA_time1" class="Column4">-</td>
+    <td></td>
+</tr>
+
+<tr>
+    <td> </td>
+    <td class="Column2-3">Break 1</td>
+    <td id="AAAA_BreakLength1" class="Column3Time">-</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+</tr>
+<tr>
+    <td> </td>
+    <td></td>
+    <td></td>
+    <td id="zAAAA_time2" class="Column4">-</td>
+    <td></td>
+</tr>
+<tr>
+    <td> </td>
+    <td class="Column2-3">Break 2</td>
+    <td id="AAAA_BreakLength2" class="Column3Time">-</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+</tr>
+<tr>
+    <td> </td>
+    <td></td>
+    <td></td>
+    <td id="zAAAA_time3" class="Column4">-</td>
+    <td></td>
+</tr>
+<tr>
+    <td> </td>
+    <td class="Column2-3">Break 3</td>
+    <td id="AAAA_BreakLength3" class="Column3Time">-</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+</tr>
+<tr>
+    <td> </td>
+    <td></td>
+    <td></td>
+    <td id="zAAAA_time4" class="Column4">-</td>
+    <td></td>
+</tr>
+<tr>
+    <td> </td>
+    <td class="Column2-3">Break 4</td>
+    <td id="AAAA_BreakLength4" class="Column3Time">-</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+</tr>
+<tr>
+    <td> </td>
+    <td></td>
+    <td></td>
+    <td id="zAAAA_time5" class="Column4">-</td>
+    <td></td>
+</tr>
+
+<tr>
+    <td colspan="8"></td>
+</tr>
+<tr>
+    <td class="ColumnH1" colspan="8">4 Pilots Uneven Rest Breaks</td>
+</tr>
+<tr>
+    <td colspan="8">&nbsp;</td>
+</tr>
+<tr>
+     <td></td>
+     <td class="ColumnH2-3" colspan="2">Break A</td>
+     <td colspan="2"><input id="ABreakLengthBox" class="InputBox" type="number" value="" onkeypress="Javascript: if (event.keyCode==13) {ABreakLengthBox.blur(); UpdateBreaks();}" /></td>
+     <td colspan ="2"><input id="UpdateBreaksButton2" type="button" onclick="UpdateBreaks()" value="Update Breaks" /></td>
+    <td></td>
+</tr>
+<tr>
+    <td colspan="8">&nbsp;</td>
+</tr>
+<tr>
+    <td></td>
+    <td class="ColumnH2-3" colspan="7">Pattern: AABB</td>
+</tr>
+<tr>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td class="ColumnH4">UTC</td>
+    <td></td>
+</tr>
+<tr>
+    <td> </td>
+    <td></td>
+    <td></td>
+    <td id="zAABB_time1" class="Column4">-</td>
+    <td></td>
+</tr>
+
+<tr>
+    <td> </td>
+    <td class="Column2-3">Break 1</td>
+    <td id="AABB_BreakLength1" class="Column3Time">-</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+</tr>
+<tr>
+    <td> </td>
+    <td></td>
+    <td></td>
+    <td id="zAABB_time2" class="Column4">-</td>
+    <td></td>
+</tr>
+<tr>
+    <td> </td>
+    <td class="Column2-3">Break 2</td>
+    <td id="AABB_BreakLength2" class="Column3Time">-</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+</tr>
+<tr>
+    <td> </td>
+    <td></td>
+    <td></td>
+    <td id="zAABB_time3" class="Column4">-</td>
+    <td></td>
+</tr>
+<tr>
+    <td> </td>
+    <td class="Column2-3">Break 3</td>
+    <td id="AABB_BreakLength3" class="Column3Time">-</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+</tr>
+<tr>
+    <td> </td>
+    <td></td>
+    <td></td>
+    <td id="zAABB_time4" class="Column4">-</td>
+    <td></td>
+</tr>
+<tr>
+    <td> </td>
+    <td class="Column2-3">Break 4</td>
+    <td id="AABB_BreakLength4" class="Column3Time">-</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+</tr>
+<tr>
+    <td> </td>
+    <td></td>
+    <td></td>
+    <td id="zAABB_time5" class="Column4">-</td>
+    <td></td>
+</tr>
+<tr>
+    <td colspan="8">&nbsp;</td>
+</tr>
+<tr>
+    <td></td>
+    <td class="ColumnH2-3" colspan="4">Pattern: ABBA</td>
+</tr>
+<tr>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td class="ColumnH4">UTC</td>
+    <td></td>
+</tr>
+<tr>
+    <td> </td>
+    <td></td>
+    <td></td>
+    <td id="zABBA_time1" class="Column4">-</td>
+    <td></td>
+</tr>
+
+<tr>
+    <td> </td>
+    <td class="Column2-3">Break 1</td>
+    <td id="ABBA_BreakLength1" class="Column3Time">-</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+</tr>
+<tr>
+    <td> </td>
+    <td></td>
+    <td></td>
+    <td id="zABBA_time2" class="Column4">-</td>
+    <td></td>
+</tr>
+<tr>
+    <td> </td>
+    <td class="Column2-3">Break 2</td>
+    <td id="ABBA_BreakLength2" class="Column3Time">-</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+</tr>
+<tr>
+    <td> </td>
+    <td></td>
+    <td></td>
+    <td id="zABBA_time3" class="Column4">-</td>
+    <td></td>
+</tr>
+<tr>
+    <td> </td>
+    <td class="Column2-3">Break 3</td>
+    <td id="ABBA_BreakLength3" class="Column3Time">-</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+</tr>
+<tr>
+    <td> </td>
+    <td></td>
+    <td></td>
+    <td id="zABBA_time4" class="Column4">-</td>
+    <td></td>
+</tr>
+<tr>
+    <td> </td>
+    <td class="Column2-3">Break 4</td>
+    <td id="ABBA_BreakLength4" class="Column3Time">-</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+</tr>
+<tr>
+    <td> </td>
+    <td></td>
+    <td></td>
+    <td id="zABBA_time5" class="Column4">-</td>
+    <td></td>
+</tr>
+<tr>
+    <td colspan="8">&nbsp;</td>
+</tr>
+</table>
     <!-- Reference to external JavaScript file -->
     <script src="script.js"></script>
     <!-- Link to external serviceworker file -->

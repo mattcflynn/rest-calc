@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta name = "viewport" content = "initial-scale = 1.5">
+    <meta charset="utf-8" />
+    <title>John Bell Crosswind calculator</title>
+    <script LANGUAGE="JAVASCRIPT" TYPE="TEXT/JAVASCRIPT">
+        function HideJavascriptWarning()
+        { document.getElementById("JavascriptWarning").className = 'hidden' }
+        function unhide(divID) {
+            var item = document.getElementById(divID);
+            if (item) {
+                item.className = (item.className == 'hidden_menu') ? 'unhidden_menu' : 'hidden_menu';
+            }
+        }
+
+        function GetWinds() {
+            var RunwayDirection;
+            var WindDirection;
+            var MagVar;
+            var MagVarEorW;
+            var SteadyWind;
+            var Gust;
+            var Additive;
+            var TempC;
+            var TempF;
+            var WindsAreKts = true
+            var MagWindText = "";
+
+            RunwayDirection = Number(document.getElementById("RunwayDirection").value);
+            WindDirection = Number(document.getElementById("WindDirection").value);
+            MagVar = Number(document.getElementById("MagVar").value);
+            SteadyWind = Number(document.getElementById("SteadyWind").value);
+            Gust = Number(document.getElementById("Gust").value);
+
+            if (Gust < SteadyWind) {
+                Gust = SteadyWind;
+                document.getElementById("Gust").value = Gust;
+            }
+
+            if (document.getElementById("WindUnits").value == "kts") {
+                document.getElementById("GustUnits").textContent = "kts"
+            }
+            else {
+                SteadyWind = SteadyWind * 1.9438;
+                Gust = Gust * 1.9438;
+                document.getElementById("GustUnits").textContent = "m/s"
+            }
+
+            if (document.getElementById("MagVarEorW").value == "E") {
+                WindDirection = WindDirection - MagVar;
+            }
+            else {
+                WindDirection = WindDirection + MagVar;
+            }
+            if (WindDirection >= 360) {
+                WindDirection = WindDirection - 360;
+            }
+            if (WindDirection < 0) {
+                WindDirection = WindDirection + 360;
+            }
+
+            var SteadyCrosswind = Math.round(Math.abs(SteadyWind * Math.sin(.017453 * (WindDirection - RunwayDirection))));
+            var SteadyHeadwind = Math.round(SteadyWind * Math.cos(.017453 * (WindDirection - RunwayDirection)));
+            var GustCrosswind = Math.round(Math.abs(Gust * Math.sin(.017453 * (WindDirection - RunwayDirection))));
+            var GustHeadwind = Math.round(Gust * Math.cos(.017453 * (WindDirection - RunwayDirection)));
+
+            Additive = 0;
+            if (SteadyHeadwind > 0) {
+                //Additive = Number(SteadyHeadwind / 2) + Number(Gust - SteadyWind);
+                Additive = SteadyHeadwind / 2;
+                Additive = Math.round(Additive + Gust - SteadyWind);
+                //if (Additive > 20) {
+                //    Additive = 20;
+                //}
+            }
+
+            //if (Additive < 5) {
+            //    Additive = 5;
+            //}
+
+
+            if (SteadyHeadwind >= 0) {
+                document.getElementById("SteadyHeadwind").textContent = SteadyHeadwind;
+                document.getElementById("GustHeadwind").textContent = GustHeadwind;
+                document.getElementById("SteadyHeadwindLabel").innerHTML = "<font color=green>&nbsp;Headwind</green>";
+                document.getElementById("GustHeadwindLabel").innerHTML = "<font color=green>&nbsp;Headwind</green>";
+            }
+            else {
+                document.getElementById("SteadyHeadwind").textContent = Math.abs(SteadyHeadwind);
+                document.getElementById("GustHeadwind").textContent = Math.abs(GustHeadwind);
+                document.getElementById("SteadyHeadwindLabel").innerHTML = "<div class='tailwind'>&nbsp;TAILWIND</div>";
+                document.getElementById("GustHeadwindLabel").innerHTML = "<div class='tailwind'>&nbsp;TAILWIND</div>";
+            }
+
+            document.getElementById("SteadyCrosswind").textContent = SteadyCrosswind;
+            document.getElementById("GustCrosswind").textContent = GustCrosswind;
+            document.getElementById("Additive").textContent = Additive;
+            MagWindText = WindDirection + "&deg;/" + SteadyWind;
+            if (Gust > SteadyWind) {
+                MagWindText += "G" + Gust;
+            }
+            document.getElementById("MagWinds").innerHTML = MagWindText;
+        }
+        function ClearCrosswindCalculator() {
+            document.getElementById("WindUnits").selectedIndex = 0;
+            document.getElementById("GustUnits").textContent = ""
+            document.getElementById("RunwayDirection").value = "";
+            document.getElementById("WindDirection").value = "";
+            document.getElementById("MagVarEorW").selectedIndex = 0;
+            document.getElementById("SteadyWind").value = "";
+            document.getElementById("GustUnits").selectedIndex = 0;
+            document.getElementById("Gust").value = "";
+            document.getElementById("MagWinds").textContent = "";
+            document.getElementById("SteadyHeadwind").textContent = "";
+            document.getElementById("GustHeadwind").textContent = "";
+            document.getElementById("SteadyHeadwindLabel").innerHTML = "";
+            document.getElementById("GustHeadwindLabel").innerHTML = "";
+            document.getElementById("SteadyCrosswind").textContent = "";
+            document.getElementById("GustCrosswind").textContent = "";
+            document.getElementById("Additive").textContent = "";
+        }
+
+        function ConvertMeters() {
+            var meters = document.getElementById("MetersInput").value;
+            var Feet = Math.round(meters * 3.2808399);
+            var SMiles = .1 * Math.round(meters * .00621371192);
+            var NMiles = .1 * Math.round(meters * .0053996);
+            document.getElementById("ConvertMetersAnswer").innerHTML = Feet.toFixed(0) + 'ft.  ' + SMiles.toFixed(1) + 'mi. ' + NMiles.toFixed(1) + 'nm.';
+        }
+        function ClearConvertMeters() {
+            document.getElementById('MetersInput').value = "";
+            document.getElementById('ConvertMetersAnswer').textContent = "";
+        }
+
+        function mps_to_knts() {
+            var mps = document.getElementById('mps').value;
+            var Knots = .1 * Math.round(mps * 19.4384449);
+            document.getElementById('KnotsOutput').innerHTML = Knots.toFixed(1) + "kts.";
+        }
+
+        function clear_mps_to_knts() {
+            document.getElementById('mps').value = "";
+            document.getElementById('KnotsOutput').innerHTML = "";
+        }
+
+        function CtoF() {
+            var F = 32 + (document.getElementById('Cinput').value * 1.8);
+            document.getElementById('Foutput').innerHTML = F.toFixed(1) + "F";
+        }
+
+        function clear_CtoF() {
+            document.getElementById('Cinput').value = "";
+            document.getElementById('Foutput').innerHTML = "";
+        }
+
+        function AddToTotal() {
+            document.getElementById("TotalerTotal").textContent = AddTimes(document.getElementById("TotalerTotal").textContent, document.getElementById("TotalerInput").value);
+            document.getElementById("TotalerInput").value = ""
+            document.getElementById("TotalerInput").focus();
+        }
+        function SubtractFromTotal() {
+            document.getElementById("TotalerTotal").textContent = SubtractTimes(document.getElementById("TotalerTotal").textContent, document.getElementById("TotalerInput").value);
+            document.getElementById("TotalerInput").value = ""
+            document.getElementById("TotalerInput").focus();
+        }
+        function ClearTimeTotaler() {
+            document.getElementById("TotalerTotal").textContent = "";
+            document.getElementById("TotalerInput").value = "";
+        }
+        function AddTimes(Time1, Time2) {
+            Time1 = DeApple(Time1);
+            Time2 = DeApple(Time2);
+            var TotalTimeString;
+            var totalminutes;
+            var totalhours;
+            Time1 = MakeLen4String(Time1);
+            Time2 = MakeLen4String(Time2);
+            totalminutes = Time1.substr(2, 2) * 1 + Time2.substr(2, 2) * 1;
+            totalhours = Time1.substr(0, 2) * 1 + Time2.substr(0, 2) * 1;
+            while (totalminutes >= 60) {
+                totalminutes = totalminutes - 60;
+                totalhours = totalhours + 1;
+            };
+            while (totalhours >= 24) {
+                totalhours = totalhours - 24;
+            };
+            TotalTimeString = String(totalminutes);
+            while (TotalTimeString.length < 2) {
+                TotalTimeString = "0" + TotalTimeString;
+            };
+            TotalTimeString = String(totalhours) + TotalTimeString;
+            TotalTimeString = MakeLen4String(TotalTimeString);
+            return TotalTimeString;
+        }
+        function DeApple(Time) {
+            //This is to deal with iOS automatically adding hyperlinks for times.
+            if (Time.indexOf(">") > 0) {
+                Time = Time.substring(Time.indexOf(">") + 1);
+                Time = Time.substring(0, Time.indexOf("<"));
+            }
+            return Time;
+        }
+        function SubtractTimes(Time1, Time2) {
+            var TotalTimeString;
+            var totalminutes;
+            var totalhours;
+            Time1 = MakeLen4String(Time1);
+            Time2 = MakeLen4String(Time2);
+            totalminutes = Time1.substr(2, 2) * 1 - Time2.substr(2, 2) * 1;
+            totalhours = Time1.substr(0, 2) * 1 - Time2.substr(0, 2) * 1;
+            while (totalminutes >= 60) {
+                totalminutes = totalminutes - 60;
+                totalhours = totalhours + 1;
+            };
+            while (totalminutes < 0) {
+                totalminutes = totalminutes + 60;
+                totalhours = totalhours - 1;
+            };
+            while (totalhours >= 24) {
+                totalhours = totalhours - 24;
+            };
+            while (totalhours < 0) {
+                totalhours = totalhours + 24;
+            };
+            TotalTimeString = String(totalminutes);
+            while (TotalTimeString.length < 2) {
+                TotalTimeString = "0" + TotalTimeString;
+            };
+            TotalTimeString = String(totalhours) + TotalTimeString;
+            TotalTimeString = MakeLen4String(TotalTimeString);
+            return TotalTimeString;
+        }
+        function MakeLen4String(sTime) {
+            sTime = String(sTime);
+            sTime = sTime.replace(":", "");
+            while (sTime.length < 4) {
+                sTime = "0" + sTime;
+            };
+            return sTime;
+        }
+    </script>
+    <style type="text/css">
+        body 
+        {
+	        margin-left: 25px;
+	        margin-top: 75px;
+	        width: 700px;
+        }
+
+
+        #CrosswindCalculator table
+        {
+        border-collapse:collapse;
+        border: 2px solid black;
+        }
+        #CrosswindCalculator td
+        {
+        border: 1px solid black;
+        }
+
+        #UnitConversions td
+        {
+        border: 1px solid black;
+        }
+
+        .WindOutputs {
+            text-align:right;
+            width: 50px;
+        }
+        .tailwind
+        {
+	        font-size:large;
+	        color:red;
+	        font-weight:bold;
+        }
+        .StandardParagraph {
+            width: 500px;
+        }
+
+        .hidden{
+           display: none;
+        }
+        #JavascriptWarning {
+            visibility:visible;
+            background:red;
+        }
+        .unhidden_menu 
+	    {
+	    visibility:visible;
+	    display: block;
+	    }
+        .hidden_menu 
+	        { visibility:hidden;
+	        display:none;
+	        }
+        #TimeTotaler table
+        {
+        border: 1px solid gray;
+        }
+</style>
+</head>
+<body onload="HideJavascriptWarning()">
+    <div id="JavascriptWarning">
+        <h1>Warning:</h1>
+        <p>This sheet will not function:</p>
+        <p><strong>Windows</strong> (including Surface):</p>
+        <p style="margin-left: 40px">Choose Allow Blocked Content. You may need to reload the page to get this option.</p>
+        <p><strong>iOS</strong></p>
+        <p style="margin-left: 40px">You need to open this into an app such as GoodReader that runs Javasript.</p>
+    </div>
+    <h1>Crosswind and Basic Metar Unit Conversions</h1>
+    <form id="CrosswindCalculator" onsubmit="return GetWinds();">
+
+    <h3>Crosswind Calculator</h3>
+    <table>
+        <tr>
+            <td colspan="3"><input type="button" style="width:100%; color:red;" value="Clear" onclick="ClearCrosswindCalculator()"></td>
+        </tr>
+        <tr>
+            <td>Runway Direction</td>
+            <td><input type="number" id="RunwayDirection" onkeypress="Javascript: if (event.keyCode==13) WindDirection.focus();"/></td>
+            <td>&deg;mag</td>
+        </tr>
+        <tr>
+            <td>Wind Direction</td>
+            <td><input type="number" id="WindDirection" onkeypress="Javascript: if (event.keyCode==13) MagVar.focus();"></td>
+            <td>&deg;</td>
+        </tr>
+        <tr>
+            <td>Mag Var</td>
+            <td><input type="number" id="MagVar" onkeypress="Javascript: if (event.keyCode==13) MagVarEorW.focus();"/></td>
+            <td>&deg;<SELECT id="MagVarEorW" onkeypress="Javascript: if (event.keyCode==13) SteadyWind.focus();" ><OPTION SELECTED>E<OPTION>W</SELECT></td>
+        </tr>
+        <tr>
+            <td colspan="3"><small>Only use mag var when needed to convert true winds.<ul><li>ATIS, Tower, and automated broadcasts are magnetic.</li><li>METAR and TAF are true.</li></ul><small></td>
+        </tr>
+
+        <tr>
+            <td>Wind Steady Speed</td>
+            <td><input type="number" id="SteadyWind" onkeypress="Javascript: if (event.keyCode==13) WindUnits.focus();"></td>
+            <td><SELECT id="WindUnits" onkeypress="Javascript: if (event.keyCode==13) Gust.focus();" ><OPTION SELECTED>kts<OPTION>m/s</SELECT></td>
+        </tr>
+        <tr>
+            <td>Wind Upper Gust</td>
+            <td><input type="number" id="Gust" onkeypress="Javascript: if (event.keyCode==13){Gust.blur(); GetWinds();}"></td>
+            <td><div id="GustUnits"></div></td>
+        </tr>
+
+        <tr>
+            <td colspan="3"><input type="button" style="width:100%" value="Calculate" onclick="GetWinds()"></td>
+        </tr>
+
+        <tr>
+            <td> Mag Winds</td>
+            <td class="WindOutputs" id="MagWinds"></td>
+            <td>kts</td>
+        </tr>
+
+        <tr>
+            <td colspan="3"><b>Steady</b></td>
+        
+        <tr>
+            <td id="SteadyHeadwindLabel">&nbsp;Headwind</td>
+            <td class="WindOutputs" id="SteadyHeadwind"></td>
+            <td>kts</td>
+        </tr>
+        <tr>
+            <td>&nbsp;Crosswind</td>
+            <td class="WindOutputs" id="SteadyCrosswind"></td>
+            <td>kts</td>
+        </tr>
+
+        <tr>
+            <td colspan="3"><b>Gust</b></td>
+        
+        <tr>
+            <td id="GustHeadwindLabel">&nbsp;Headwind</td>
+            <td class="WindOutputs" id="GustHeadwind"></td>
+            <td>kts</td>
+        </tr>
+
+        <tr>
+            <td>&nbsp;Crosswind</td>
+            <td class="WindOutputs" id="GustCrosswind"></td>
+            <td>kts</td>
+        </tr>
+
+        <tr>
+            <td colspan="3"><b>Additive if appropriate</b><br/><small>&nbsp;&nbsp;&nbsp;(Use the min and max appropriate for your fleet)</small></td>
+        <tr>
+            <td>&nbsp;Half head + all gust&nbsp;</td>
+            <td class="WindOutputs" id="Additive"></td>
+            <td>kts</td>
+        </tr>
+
+        </table>        
+    </form>
+<h3>Basic Metar Unit Conversion</h3>
+    <div id="UnitConversions">
+    <TABLE>
+        <TR>
+           <TD><INPUT type="button" value="Clear" style="color:red;" style="width:75px;" onclick="ClearConvertMeters();"></TD>
+           <TD><INPUT type="number" id="MetersInput" style="width:75px;" onkeypress="Javascript: if (event.keyCode==13){ConvertMeters();}"> meters</TD>
+           <TD><INPUT type="button" value="Convert -&gt;" style="width:75px;" onclick="ConvertMeters();"></TD>
+           <TD><div id="ConvertMetersAnswer"></div></TD>
+        </TR>
+        <TR>
+           <TD><INPUT type=reset name="clear23" value="Clear" style="color:red;" style="width:75px;" onclick="clear_mps_to_knts();"></TD>
+           <TD><INPUT type="number" id="mps"style="width:75px;" onkeypress="Javascript: if (event.keyCode==13){mps_to_knts();}"> mps</TD>
+           <TD><INPUT type="button" onClick="mps_to_knts();" value="Convert -&gt" style="width:75px;"></TD>
+           <TD><div id ="KnotsOutput"></div></TD>
+        </TR>
+
+        <TR>
+           <TD><INPUT type="button" name="clear24" value="Clear" style="color:red;" style="width:75px;" onclick="clear_CtoF();"></TD>
+           <TD><INPUT type="number" id="Cinput" style="width:75px;" onkeypress="Javascript: if (event.keyCode==13){CtoF();}"> C</TD>
+           <TD><INPUT type="button" onClick="CtoF();" value="Convert -&gt" style="width:75px;"></TD>
+           <TD><div id="Foutput"></div></TD>
+           </TD>
+        </TR>
+    </TABLE>
+    </div>
+    </div>
+    <div id="TimeTotaler">
+        <h3>Time Totaler</h3>
+        <table>
+            <tr><td colspan="3"><input type="button" style="width:100%; color:red;" value="Clear" onclick="ClearTimeTotaler()"></td></tr>
+            <tr><td>Time (hhmm)</td><td style="width:75px;"><input type="text" style="width:75px;" id="TotalerInput"></td><td  style="width:75px;"></td></tr>
+            <tr><td>Operation</td><td><input type="button" style="width:100%" value="+ Add" onclick="AddToTotal()"</td><td><input type="button" style="width:100%" value="- Subtract" onclick="    SubtractFromTotal()"</></tr>
+            <tr><td>Total</td><td id="TotalerTotal"></td></tr>
+        </tr>
+        </table>
+    </div>
+</div>
+</body>
+</html>
